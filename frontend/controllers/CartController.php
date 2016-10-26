@@ -82,8 +82,16 @@ class CartController extends \yii\web\Controller
             $transaction->commit();
             \Yii::$app->cart->removeAll();
 
-            \Yii::$app->session->addFlash('success', 'Thanks for your order. We\'ll contact you soon.');
-            $order->sendEmail();
+            \Yii::$app->session->addFlash('success', 'Спасибо за Ваш заказ. В ближайшее время мы свяжемся с Вами.');
+            /*if*/($order->sendEmail())
+                /*\Yii::$app->session->addFlash('success', 'The mail sent successfully.');
+            else
+                \Yii::$app->session->addFlash('error', 'Cannot send email.')*/;
+            $order->notify('Подтверждение заказа', [
+                'order' => $order,
+                'title' => 'Подтверждение заказа №',
+                'text' => "Уважаемый $order->name,\n\nВаш заказ принят. В ближайшее время мы свяжемся с Вами.  \nСпасибо за то, что обратились к нам.",
+            ]);
 
             return $this->redirect('catalog/list');
         }

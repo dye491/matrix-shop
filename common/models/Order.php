@@ -11,6 +11,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $id
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $name
  * @property string $phone
  * @property string $address
  * @property string $email
@@ -47,10 +48,10 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['phone', 'email'], 'required'],
+            [['email', 'phone'], 'required'],
             [['notes'], 'string'],
-            [['phone', 'email'], 'string', 'max' => 255],
-            [['email'], 'email'],
+            [['phone', 'email', 'name', 'address'], 'string', 'max' => 255],
+            [['email'], 'email',],
         ];
     }
 
@@ -61,13 +62,14 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'phone' => 'Phone',
-            'address' => 'Address',
-            'email' => 'Email',
-            'notes' => 'Notes',
-            'status' => 'Status',
+            'created_at' => 'Создан',
+            'updated_at' => 'Изменен',
+            'name' => 'Ваше имя',
+            'phone' => 'Телефон',
+            'address' => 'Адрес доставки',
+            'email' => 'Эл. почта',
+            'notes' => 'Примечание к заказу',
+            'status' => 'Статус',
         ];
     }
 
@@ -96,16 +98,25 @@ class Order extends \yii\db\ActiveRecord
         return [
             self::STATUS_DONE => 'Done',
             self::STATUS_IN_PROGRESS => 'In progress',
-            self::STATUS_NEW => 'New',
+            self::STATUS_NEW => 'Новый',
         ];
     }
 
     public function sendEmail()
     {
         return Yii::$app->mailer->compose('order', ['order' => $this])
-            ->setTo(Yii::$app->params['adminEmail'])
+            ->setTo(Yii::$app->params['shopperEmail'])
             ->setFrom(Yii::$app->params['adminEmail'])
-            ->setSubject('New order #' . $this->id)
+            ->setSubject('Новый заказ №' . $this->id)
+            ->send();
+    }
+
+    public function notify($subject, array $params)
+    {
+        return Yii::$app->mailer->compose('orderNotify', $params)
+            ->setTo($this->email)
+            ->setFrom(Yii::$app->params['adminEmail'])
+            ->setSubject($subject)
             ->send();
     }
 }

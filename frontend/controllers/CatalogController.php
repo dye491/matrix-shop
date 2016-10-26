@@ -39,10 +39,24 @@ class CatalogController extends \yii\web\Controller
             ],
         ]);
 
+        $breadcrumbs = [];
+        if ($category) {
+            $parent = $category->parent_id;
+            while ($parent) {
+                $breadcrumb = [
+                    'label' => $categories[$parent]->title,
+                    'url' => ['catalog/list', 'id' => $parent],
+                ];
+                array_unshift($breadcrumbs, $breadcrumb);
+                $parent = $categories[$parent]->parent_id;
+            }
+        }
+
         return $this->render('list', [
             'category' => $category,
             'menuItems' => $this->getMenuItems($categories, isset($category->id) ? $category->id : null),
             'productsDataProvider' => $productsDataProvider,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 
@@ -87,8 +101,7 @@ class CatalogController extends \yii\web\Controller
         foreach ($categories as $category) {
             if ($category->id == $categoryId) {
                 $categoryIds[] = $category->id;
-            }
-            elseif ($category->parent_id == $categoryId){
+            } elseif ($category->parent_id == $categoryId) {
                 $this->getCategoryIds($categories, $category->id, $categoryIds);
             }
         }

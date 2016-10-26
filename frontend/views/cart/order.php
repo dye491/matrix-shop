@@ -5,7 +5,7 @@ use \yii\bootstrap\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $products common\models\Product[] */
 ?>
-<h1>Your order</h1>
+<h1>Ваш заказ</h1>
 
 <div class="container-fluid">
     <div class="row">
@@ -13,13 +13,13 @@ use \yii\bootstrap\ActiveForm;
 
         </div>
         <div class="col-xs-2">
-            Price
+            Цена
         </div>
         <div class="col-xs-2">
-            Quantity
+            Количество
         </div>
         <div class="col-xs-2">
-            Cost
+            Сумма
         </div>
     </div>
     <?php foreach ($products as $product):?>
@@ -28,13 +28,13 @@ use \yii\bootstrap\ActiveForm;
             <?= Html::encode($product->title) ?>
         </div>
         <div class="col-xs-2">
-            $<?= $product->price ?>
+            <?= $product->price ?> р.
         </div>
         <div class="col-xs-2">
             <?= $quantity = $product->getQuantity()?>
         </div>
         <div class="col-xs-2">
-            $<?= $product->getCost() ?>
+            <?= $product->getCost() ?> р.
         </div>
     </div>
     <?php endforeach ?>
@@ -43,7 +43,7 @@ use \yii\bootstrap\ActiveForm;
 
         </div>
         <div class="col-xs-2">
-            Total: $<?= $total ?>
+            Итого: <?= $total ?> р.
         </div>
     </div>
 
@@ -55,13 +55,15 @@ use \yii\bootstrap\ActiveForm;
                 'id' => 'order-form',
             ]) ?>
 
+            <?= $form->field($order, 'name' ) ?>
             <?= $form->field($order, 'phone') ?>
             <?= $form->field($order, 'email') ?>
+            <?= $form->field($order, 'address') ?>
             <?= $form->field($order, 'notes')->textarea() ?>
 
             <div class="form-group row">
                 <div class="col-xs-12">
-                    <?= Html::submitButton('Order', ['class' => 'btn btn-primary']) ?>
+                    <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
                 </div>
             </div>
 

@@ -4,21 +4,24 @@ use \yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $products common\models\Product[] */
 ?>
-<h1>Your cart</h1>
+<h1>Ваша корзина</h1>
 
+<?php if(empty($products)): ?>
+<p>Ваша корзина пуста.</p>
+<?php else: ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-4">
 
         </div>
         <div class="col-xs-2">
-            Price
+            Цена
         </div>
         <div class="col-xs-2">
-            Quantity
+            Количество
         </div>
         <div class="col-xs-2">
-            Cost
+            Сумма
         </div>
         <div class="col-xs-2">
 
@@ -30,7 +33,7 @@ use \yii\helpers\Html;
             <?= Html::encode($product->title) ?>
         </div>
         <div class="col-xs-2">
-            $<?= $product->price ?>
+            <?= $product->price ?> р.
         </div>
         <div class="col-xs-2">
             <?= $quantity = $product->getQuantity()?>
@@ -39,10 +42,10 @@ use \yii\helpers\Html;
             <?= Html::a('+', ['cart/update', 'id' => $product->getId(), 'quantity' => $quantity + 1], ['class' => 'btn btn-success'])?>
         </div>
         <div class="col-xs-2">
-            $<?= $product->getCost() ?>
+            <?= $product->getCost() ?> р.
         </div>
         <div class="col-xs-2">
-            <?= Html::a('×', ['cart/remove', 'id' => $product->getId()], ['class' => 'btn btn-danger'])?>
+            <?= Html::a('×', ['cart/remove', 'id' => $product->getId()], ['class' => 'btn btn-danger'/*, 'style' => 'width: 100%'*/])?>
         </div>
     </div>
     <?php endforeach ?>
@@ -51,10 +54,11 @@ use \yii\helpers\Html;
 
         </div>
         <div class="col-xs-2">
-            Total: $<?= $total ?>
+            Итого: <?= $total ?> р.
         </div>
         <div class="col-xs-2">
-            <?= Html::a('Order', ['cart/order'], ['class' => 'btn btn-success'])?>
+            <?= Html::a('Оформить заказ', ['cart/order'], ['class' => 'btn btn-success'/*, 'style' => 'width: 100%'*/])?>
         </div>
     </div>
 </div>
+<?php endif; ?>

@@ -4,8 +4,12 @@ use yii\widgets\ListView;
 use yii\widgets\Menu;
 
 /* @var $this yii\web\View */
-$title = $category === null ? 'Welcome!' : $category->title;
+$title = $category === null ? 'Matrix - каталог товаров' : $category->title;
 $this->title = Html::encode($title);
+foreach ($breadcrumbs as $breadcrumb) {
+    $this->params['breadcrumbs'][] = $breadcrumb;
+}
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <h1><?= Html::encode($title) ?></h1>
