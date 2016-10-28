@@ -76,11 +76,14 @@ class CatalogController extends \yii\web\Controller
         $menuItems = [];
         foreach ($categories as $category) {
             if ($category->parent_id === $parent) {
+                $childItems =  $this->getMenuItems($categories, $activeId, $category->id);
                 $menuItems[$category->id] = [
                     'active' => $activeId === $category->id,
                     'label' => $category->title,
                     'url' => ['catalog/list', 'id' => $category->id],
-                    'items' => $this->getMenuItems($categories, $activeId, $category->id),
+//                    'url' => '#',
+                    'items' => $childItems/*$this->getMenuItems($categories, $activeId, $category->id)*/,
+                    'template' => '<a class="tree-toggle" href="{url}">{label}' . (empty($childItems) ? '' : '<b class="caret"></b>') . '</a>',
                 ];
             }
         }
